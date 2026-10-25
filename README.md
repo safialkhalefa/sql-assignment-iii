@@ -50,8 +50,9 @@
 ### 1.2 Keys & Referential Integrity
 
 ```
-[ categories ] (1) <--- (N) [ medicines ] (1) <--- (N) [ sales ]
 ```
+[ categories ] (1) <--- (N) [ medicines ] (1) <--- (N) [ sales ]
+
 
 * **`categories.category_id`** `[PK]`: Auto-incrementing unique identifier.
 * **`medicines.medicine_id`** `[PK]`: Auto-incrementing unique inventory item ID.
@@ -60,11 +61,12 @@
 * **`sales.sale_id`** `[PK]`: Auto-incrementing transaction invoice number.
 * **`sales.medicine_id`** `[FK]`: References `medicines(medicine_id)`
   * *Policy:* `ON DELETE RESTRICT ON UPDATE CASCADE`
-
+```
+```
 ### 1.3 Entity-Relationship Diagram (ERD)
 > Generated via pgAdmin 4 prior to structural schema modifications.
 
-```
+
 +------------------+         +--------------------+         +--------------------+
 |    categories    |         |     medicines      |         |       sales        |
 +------------------+         +--------------------+         +--------------------+
@@ -74,7 +76,7 @@
 +------------------+         |    unit_price      |         |    quantity_sold   |
                              |    stock_quantity  |         |    sale_date       |
                              +--------------------+         +--------------------+
-```
+
 
 ![ERD](erd.png)
 
@@ -85,7 +87,7 @@
 ### 2.1 Database Initialization
 ```sql
 CREATE DATABASE safialkhalefa_pharmacy_system;
-```
+
 
 ### 2.2 Table Schemas & Constraints
 ```sql
@@ -123,9 +125,9 @@ CREATE TABLE sales (
         ON DELETE RESTRICT 
         ON UPDATE CASCADE
 );
-```
 
----
+
+
 
 ## 3. DML: Seed Data Insertion
 
@@ -155,7 +157,7 @@ INSERT INTO sales (medicine_id, customer_name, quantity_sold, sale_date) VALUES
 (2, 'David Habimana',    1, '2026-10-25'),
 (3, 'Grace Uwera',       3, '2026-10-25'),
 (4, 'Emmanuel Ndahiro',  2, '2026-10-25');
-```
+
 
 ---
 
@@ -169,7 +171,7 @@ INSERT INTO sales (medicine_id, customer_name, quantity_sold, sale_date) VALUES
   ```sql
   SELECT medicine_name, unit_price, stock_quantity 
   FROM medicines;
-  ```
+  
 * **Output Evidence:**  
   ![Q1.1 Result](screenshots/q1_1.png)
 * **Technical Note:** Selects only customer-facing attributes without exposing internal surrogate keys.
@@ -184,7 +186,7 @@ INSERT INTO sales (medicine_id, customer_name, quantity_sold, sale_date) VALUES
   FROM medicines 
   WHERE unit_price > 5.00 
     AND stock_quantity < 100;
-  ```
+  
 * **Output Evidence:**  
   ![Q1.2 Result](screenshots/q1_2.png)
 * **Technical Note:** Combines comparison operators to isolate high-value items requiring immediate reorder.
@@ -198,7 +200,7 @@ INSERT INTO sales (medicine_id, customer_name, quantity_sold, sale_date) VALUES
   SELECT medicine_id, medicine_name, unit_price, stock_quantity 
   FROM medicines 
   ORDER BY unit_price DESC;
-  ```
+  
 * **Output Evidence:**  
   ![Q1.3 Result](screenshots/q1_3.png)
 * **Technical Note:** Orders rows descending based on numeric valuation.
@@ -219,7 +221,7 @@ INSERT INTO sales (medicine_id, customer_name, quantity_sold, sale_date) VALUES
   FROM medicines m
   INNER JOIN categories c 
       ON m.category_id = c.category_id;
-  ```
+  
 * **Output Evidence:**  
   ![Q2.1 Result](screenshots/q2_1.png)
 * **Technical Note:** Returns only records with matches in both tables, omitting unlinked records.
@@ -237,7 +239,7 @@ INSERT INTO sales (medicine_id, customer_name, quantity_sold, sale_date) VALUES
   FROM categories c
   LEFT JOIN medicines m 
       ON c.category_id = m.category_id;
-  ```
+  
 * **Output Evidence:**  
   ![Q2.2 Result](screenshots/q2_2.png)
 * **Technical Note:** Preserves categories such as *Antacids* by returning `NULL` for missing medicine fields.
@@ -261,7 +263,7 @@ INSERT INTO sales (medicine_id, customer_name, quantity_sold, sale_date) VALUES
   INNER JOIN medicines m  ON s.medicine_id = m.medicine_id
   INNER JOIN categories c ON m.category_id = c.category_id
   ORDER BY s.sale_date ASC;
-  ```
+  
 * **Output Evidence:**  
   ![Q2.3 Result](screenshots/q2_3.png)
 * **Technical Note:** Demonstrates 3-table traversal with runtime dynamic computation (`total_amount`).
@@ -277,13 +279,13 @@ INSERT INTO sales (medicine_id, customer_name, quantity_sold, sale_date) VALUES
   UPDATE medicines
   SET unit_price = 3.50
   WHERE medicine_id = 2;
-  ```
+  
 * **Verification:**
   ```sql
   SELECT medicine_id, medicine_name, unit_price 
   FROM medicines 
   WHERE medicine_id = 2;
-  ```
+  
 * **Output Evidence:**  
   ![Q3.1 Result](screenshots/q3_1.png)
 
@@ -296,12 +298,12 @@ INSERT INTO sales (medicine_id, customer_name, quantity_sold, sale_date) VALUES
   UPDATE medicines
   SET stock_quantity = stock_quantity + 30
   WHERE stock_quantity < 50;
-  ```
+  
 * **Verification:**
   ```sql
   SELECT medicine_id, medicine_name, stock_quantity 
   FROM medicines;
-  ```
+  
 * **Output Evidence:**  
   ![Q3.2 Result](screenshots/q3_2.png)
 
@@ -314,13 +316,13 @@ INSERT INTO sales (medicine_id, customer_name, quantity_sold, sale_date) VALUES
   UPDATE medicines
   SET unit_price = ROUND(unit_price * 0.90, 2)
   WHERE category_id = 2;
-  ```
+  
 * **Verification:**
   ```sql
   SELECT medicine_id, medicine_name, unit_price, category_id 
   FROM medicines 
   WHERE category_id = 2;
-  ```
+  
 * **Output Evidence:**  
   ![Q3.3 Result](screenshots/q3_3.png)
 
@@ -334,13 +336,13 @@ INSERT INTO sales (medicine_id, customer_name, quantity_sold, sale_date) VALUES
   ```sql
   ALTER TABLE categories 
   RENAME COLUMN description TO category_description;
-  ```
+  
 * **Verification:**
   ```sql
   SELECT category_id, category_name, category_description 
   FROM categories 
   LIMIT 3;
-  ```
+  
 * **Output Evidence:**  
   ![Q4.1 Result](screenshots/q4_1.png)
 
@@ -352,13 +354,13 @@ INSERT INTO sales (medicine_id, customer_name, quantity_sold, sale_date) VALUES
   ```sql
   ALTER TABLE sales 
   ALTER COLUMN customer_name TYPE VARCHAR(180);
-  ```
+  
 * **Verification (Schema Metadata):**
   ```sql
   SELECT column_name, data_type, character_maximum_length 
   FROM information_schema.columns 
   WHERE table_name = 'sales' AND column_name = 'customer_name';
-  ```
+  
 * **Output Evidence:**  
   ![Q4.2 Result](screenshots/q4_2.png)
 
@@ -370,13 +372,13 @@ INSERT INTO sales (medicine_id, customer_name, quantity_sold, sale_date) VALUES
   ```sql
   ALTER TABLE medicines 
   ADD COLUMN expiry_date DATE DEFAULT '2028-12-31';
-  ```
+  
 * **Verification:**
   ```sql
   SELECT medicine_id, medicine_name, expiry_date 
   FROM medicines 
   LIMIT 3;
-  ```
+  
 * **Output Evidence:**  
   ![Q4.3 Result](screenshots/q4_3.png)
 
@@ -390,11 +392,11 @@ INSERT INTO sales (medicine_id, customer_name, quantity_sold, sale_date) VALUES
   ```sql
   INSERT INTO categories (category_name, category_description) 
   VALUES ('Cardiovascular', 'Drugs used to treat conditions of the heart and blood vessels');
-  ```
+  
 * **Verification:**
   ```sql
   SELECT * FROM categories WHERE category_name = 'Cardiovascular';
-  ```
+  
 * **Output Evidence:**  
   ![Q5.1 Result](screenshots/q5_1.png)
 
@@ -408,12 +410,12 @@ INSERT INTO sales (medicine_id, customer_name, quantity_sold, sale_date) VALUES
   VALUES
   ('Amlodipine 5mg',   9.50,  60, 6, '2028-06-30'),
   ('Omeprazole 20mg',  6.00, 110, 5, '2027-11-15');
-  ```
+  
 * **Verification:**
   ```sql
   SELECT * FROM medicines 
   WHERE medicine_name IN ('Amlodipine 5mg', 'Omeprazole 20mg');
-  ```
+  
 * **Output Evidence:**  
   ![Q5.2 Result](screenshots/q5_2.png)
 
@@ -425,7 +427,7 @@ INSERT INTO sales (medicine_id, customer_name, quantity_sold, sale_date) VALUES
   ```sql
   INSERT INTO sales (medicine_id, customer_name, quantity_sold, sale_date) 
   VALUES (6, 'Patrick Kayitare', 1, '2026-10-26');
-  ```
+  
 * **Verification:**
   ```sql
   SELECT 
@@ -437,7 +439,7 @@ INSERT INTO sales (medicine_id, customer_name, quantity_sold, sale_date) VALUES
   FROM sales s
   INNER JOIN medicines m ON s.medicine_id = m.medicine_id
   WHERE s.customer_name = 'Patrick Kayitare';
-  ```
+  
 * **Output Evidence:**  
   ![Q5.3 Result](screenshots/q5_3.png)
 
