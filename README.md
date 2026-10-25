@@ -8,8 +8,8 @@
 | Field | Details |
 | --- | --- |
 | Project Title | Pharmacy Inventory and Sales Management System |
-| Student Name | Safi Alkhalefa |
-| Student ID | [Your Student ID] |
+| Student Name | SafiALDEN Alkhalefa |
+| Student ID | [202512802] |
 | Business Idea | Pharmacy Management System |
 | DBMS | PostgreSQL |
 | Instructor | Eric Maniraguha |
