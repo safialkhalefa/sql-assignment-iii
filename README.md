@@ -1,4 +1,4 @@
-```markdown
+
 # Pharmacy Inventory and Sales Management System
 
 ## Assignment III: SQL Table Manipulation
