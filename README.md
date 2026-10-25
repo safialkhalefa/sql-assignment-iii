@@ -445,4 +445,4 @@ WHERE s.customer_name = 'Patrick Kayitare';
 ## Conclusion
 
 This assignment focused on designing and implementing a relational database for a Pharmacy Management System using PostgreSQL. The project strengthened key database skills, including creating parent and child tables, enforcing referential integrity through primary and foreign keys, retrieving and filtering data with `SELECT`, `WHERE`, and `JOIN`, applying updates safely, and modifying database structure using `ALTER TABLE`.
-```
+
